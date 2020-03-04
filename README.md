@@ -17,7 +17,7 @@ Once you flash your microcontroller with the provided code and plug it in, it wi
 * ESP8266 needs constant USB power. The good news is that it will also keep your blinds fully charged.
 
 # Setup
-* In the `stls` folder, you'll find a case that will fit an ESP8266 board, a USB breakout board and 2 buttons. It can be 3D printed without supports. The buttons I used can be found by searching for `12mm Waterproof Momentary N.O. Push Button Switch`. The case is kept closed by 4 M3 6mm bolts. You will need 2 more M3 6mm screws for the USB board.
+* In the `stls` folder, you'll find a case that will fit an ESP8266 board, a USB breakout board and 2 buttons. It can be 3D printed without supports. The buttons I used can be found by searching for `12mm Waterproof Momentary N.O. Push Button Switch`. The case is kept closed by 4 M3 6mm bolts. You will need 2 more M3 6mm bolts for the USB board.
 * At the top of the Arduino sketch, you can see (and change, if you'd like) the pins in use:
     ```
     #define UP_PIN 4
