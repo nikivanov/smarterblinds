@@ -3,7 +3,8 @@
 <img src="images/render.png" width="49%"></img>
 <img src="images/blinds.png" width="49%">
 </p>
-Blinds-To-Go sells motorized roller blinds controllable via a wand with two buttons, which connects to the blinds over Micro-USB. Unfortunately, it does not offer any smart functionality, but having a Micro-USB connection makes it very hackable. Hooking up the wand to the breakout board shows that Up and Down buttons short D+ / D- pins to ground. This project replaces the wand with ESP8266 with some buttons to allow for raising blinds on schedule as well as remote control via the phone / browser. 
+Blinds-To-Go sells motorized roller blinds controllable via a wand with two buttons, which connects to the blinds over Micro-USB. Unfortunately, it does not offer any smart functionality, but having a Micro-USB connection makes it very hackable. Hooking up the wand to a breakout board shows that Up and Down buttons short D+ / D- pins to ground. This project replaces the wand with an ESP8266 microcontroller to allow for raising blinds on schedule as well as remote control via the phone / browser. 
+
 
 I'm not associated with Blinds-To-Go and I'm not responsible for any damage caused to or by your blinds. With that being said, hack away!
 
