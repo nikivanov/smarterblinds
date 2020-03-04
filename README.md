@@ -1,7 +1,7 @@
 # Overview
 <p align="center">
-<img src="images/render.png" width="49.5%"></img>
-<img src="images/blinds.png" width="49.5%">
+<img src="images/render.png" width="49%"></img>
+<img src="images/blinds.png" width="49%">
 </p>
 Blinds-To-Go sells motorized roller blinds controllable via a wand with two buttons, which connects to the blinds over Micro-USB. Unfortunately, it does not offer any smart functionality, but having a Micro-USB connection makes it very hackable. Hooking up the wand to a breakout board shows that Up and Down buttons short D+ / D- pins to ground. This project replaces the wand with an ESP8266 microcontroller to allow raising blinds on schedule as well as remote control via the phone / browser. 
 
@@ -16,8 +16,14 @@ Once you flash your microcontroller with the provided code and plug it in, it wi
 * ESP8266 does not have a real time clock, but since we have WiFi we can keep time using NTP. This allows the controller to match current time against the specified schedule.
 * ESP8266 needs constant USB power. The good news is that it will also keep your blinds fully charged.
 
+# Ingredients
+* [NodeMCU ESP8266 board](images/nodemcu.jpg)
+* [USB Type A breakout board](images/breakout_board.jpg)
+* [2x 12mm Waterproof Momentary N.O. Push Button Switch](images/buttons.jpg)
+* 10x M3 6mm bolts
+
 # Setup
-* In the `stls` folder, you'll find a case that will fit an ESP8266 board, a USB breakout board and 2 buttons. It can be 3D printed without supports. The buttons I used can be found by searching for `12mm Waterproof Momentary N.O. Push Button Switch`. The case is kept closed by 4 M3 6mm bolts. You will need 2 more M3 6mm bolts for the USB board.
+* In the `stls` folder, you'll find a case that will fit an ESP8266 board, a USB breakout board and 2 buttons. It can be 3D printed without supports. 
 * At the top of the Arduino sketch, you can see (and change, if you'd like) the pins in use:
     ```
     #define UP_PIN 4
@@ -34,3 +40,4 @@ Once you flash your microcontroller with the provided code and plug it in, it wi
     * Up Button to BUTTON_UP_PIN
     * Down Button to BUTTON_DOWN_PIN
     * Other contact of each button can be soldered together and then soldered to GND.
+* Test everything first, and if all is well, secure everything with M3 bolts.
