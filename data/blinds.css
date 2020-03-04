@@ -1,0 +1,57 @@
+div.centerContainer {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 95vw;
+    font-size: 20px;  
+    text-align: center;
+    vertical-align: middle;
+}
+
+div.centerContainer > div {
+    margin: 20px;
+}
+
+div.controlButton {
+    border: 1px solid gray;
+    height: 200px;
+    background-color: lightgray;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+div.controlButton.pressed {
+    background-color: gainsboro;
+}
+
+.material-icons.md-96 { 
+    font-size: 96px; 
+    padding-top: 48px;
+}
+
+div.middlePane > div {
+    display: inline-block;
+    margin: 20px;
+    width: 120px;
+}
+div.middlePane > div > span, div.middlePane > div > input {
+    display: block;
+}
+
+div.middlePane > div > span {
+    height: 40px;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 40px;
+}
+
+div.middlePane > div > input {
+    font-size: 16px;
+    width: 120px;
+}
