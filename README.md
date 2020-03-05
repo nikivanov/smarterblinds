@@ -31,6 +31,10 @@ Once you flash your microcontroller with the provided code and plug it in, it wi
     #define BUTTON_UP_PIN 12
     #define BUTTON_DOWN_PIN 14
     ```
+* Set the UTC time offset on the line below. For example, I'm in USA Easter Time Zone, which is -5 hours from UTC, so -5 * 60 *60 = -18000
+    ```
+    const long utcOffsetInSeconds = -18000; // should be configurable
+    ```
 * Solder the pins to the USB breakout board as follows:
     * UP_PIN to D+
     * DOWN_PIN to D-
