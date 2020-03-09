@@ -13,10 +13,9 @@
 #define BUTTON_UP_PIN 12
 #define BUTTON_DOWN_PIN 14
 
-const long utcOffsetInSeconds = -18000; // should be configurable
 WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org", utcOffsetInSeconds);
-DynamicJsonDocument config(2048);
+NTPClient timeClient(ntpUDP);
+DynamicJsonDocument config(1024);
 ESP8266WebServer server(80);
 
 void setup() {
@@ -55,6 +54,7 @@ void setup() {
     Serial.println("Config file found");
     deserializeJson(config, configFile);
     configFile.close();
+    initTimeClientFromConfig();
   }
 
   server.on("/", handleRoot);
@@ -68,6 +68,16 @@ void setup() {
   server.begin();
   
   Serial.println("Server started");
+}
+
+void initTimeClientFromConfig() {
+  int offsetHours = config["offsetHours"].as<int>();
+  bool dst = config["dst"].as<bool>();
+  if (dst) {
+    offsetHours = offsetHours + 1;
+  }
+  int offsetSeconds = offsetHours * 60 * 60;
+  timeClient.setTimeOffset(offsetSeconds);
 }
 
 int desiredDirection = 0;
@@ -115,10 +125,10 @@ void loop(void) {
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 void checkSchedule() {
   const char* currentDoW = daysOfTheWeek[timeClient.getDay()];
-  if (config[currentDoW] != NULL) {
-    //Serial.println(String(currentDoW) + " " + timeClient.getHours() + " " + timeClient.getMinutes() + " " + String(config[currentDoW]["localHours"].as<int>()) + " " + String(config[currentDoW]["localMinutes"].as<int>()));
-    if (timeClient.getHours() == config[currentDoW]["localHours"].as<int>()) {
-      if (timeClient.getMinutes() == config[currentDoW]["localMinutes"].as<int>()) {
+  if (config["schedule"][currentDoW] != NULL) {
+    //Serial.println(String(currentDoW) + " " + timeClient.getHours() + " " + timeClient.getMinutes() + " " + String(config["schedule"][currentDoW]["localHours"].as<int>()) + " " + String(config["schedule"][currentDoW]["localMinutes"].as<int>()));
+    if (timeClient.getHours() == config["schedule"][currentDoW]["localHours"].as<int>()) {
+      if (timeClient.getMinutes() == config["schedule"][currentDoW]["localMinutes"].as<int>()) {
         if (timeClient.getSeconds() >= 0 && timeClient.getSeconds() <= 2) {
           Serial.println("Schedule match");
           digitalWrite(UP_PIN, LOW);
@@ -146,11 +156,17 @@ void handleSettings() {
     configFile.print(server.arg("plain"));
     deserializeJson(config, server.arg("plain"));
     configFile.close();
+    initTimeClientFromConfig();
+    server.send(200, "text/plain", "OK");
   }
   else if (server.method() == HTTP_GET) {
     Serial.println("Sent settings to the browser");
     String output;
-    serializeJson(config, output);
+    Serial.println("Sending currentTimeMS " + timeClient.getFormattedTime());
+    DynamicJsonDocument configCopy(1024);
+    configCopy = config;
+    configCopy["currentTime"] = timeClient.getFormattedTime();
+    serializeJson(configCopy, output);
     server.send(200, "text/json", output);
     Serial.println(output);
   }

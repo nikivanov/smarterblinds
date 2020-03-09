@@ -25,25 +25,25 @@ $(document).ready(function() {
         onDownButtonReleased();
     });
 
-    setupMiddlePane();
+    setupMiddlePanes();
 });
 
 const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-function setupMiddlePane() {
-    const container = $("div.middlePane");
-    container.empty();
+function setupMiddlePanes() {
+    const middleContainer = $("div.middlePane");
+    middleContainer.empty();
     for (const dayOfWeek of daysOfWeek) {
         const innerContainer = $("<div></div>");
         innerContainer.append("<span>" + dayOfWeek + "</span>");
         innerContainer.append("<input type='time' dow='" + dayOfWeek + "'></input>");
-        container.append(innerContainer);
+        middleContainer.append(innerContainer);
     }
 
     $.get('/settings', function(settings) {
-        if (settings) {
-            for (const dow of Object.keys(settings)) {
+        if (settings && settings.schedule) {
+            for (const dow of Object.keys(settings.schedule)) {
                 const input = $("div.middlePane input[dow=" + dow + "]");
-                const value = settings[dow];
+                const value = settings.schedule[dow];
                 if (value) {
                     let valueString = '';
                     if (value.localHours <= 9) {
@@ -60,30 +60,51 @@ function setupMiddlePane() {
                     input.val(null);
                 }
             }
+
+            $("div.timezonePane select option[timeZoneId='"
+             + settings.timezoneId + "'] ").prop("selected", true);
+
+            $("#dstCheckbox").prop("checked", settings.dst);
+            $("#servertTime").text("Controller time is " + settings.currentTime);
         }
-        attachInputHandlers();
+        attachHandlers();
         
     });
 }
 
-function attachInputHandlers() {
+function attachHandlers() {
     const inputs = $("div.middlePane input");
     inputs.change(function() {
-        const settings = {};
-        for (const input of inputs) {
-            const key = $(input).attr("dow");
-            const date = input.valueAsDate;
-            let value = null;
-            if (date) {
-                value = {
-                    localHours: date.getUTCHours(),
-                    localMinutes: date.getUTCMinutes()
-                };
-            }
-            settings[key] = value;
-        }
-        postJson("/settings", settings);
+        sendSettings();
     });
+    $("div.timezonePane select").change(function() {
+        sendSettings();
+    });
+    $("#dstCheckbox").change(function() {
+        sendSettings();
+    });
+}
+
+function sendSettings() {
+    const inputs = $("div.middlePane input");
+    const settings = { schedule: {}};
+    for (const input of inputs) {
+        const key = $(input).attr("dow");
+        const date = input.valueAsDate;
+        let value = null;
+        if (date) {
+            value = {
+                localHours: date.getUTCHours(),
+                localMinutes: date.getUTCMinutes()
+            };
+        }
+        settings.schedule[key] = value;
+    }
+    settings.offsetHours = parseInt($("div.timezonePane select").children("option:selected").val());
+    settings.timezoneId = parseInt($("div.timezonePane select").children("option:selected").attr('timeZoneId'));
+    settings.dst = $("#dstCheckbox").prop("checked") == true;
+        
+    postJson("/settings", settings);
 }
 
 function onUpButtonPressed() {

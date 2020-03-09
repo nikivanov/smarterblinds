@@ -2,7 +2,7 @@
 <p align="center">
 <img src="images/render.png" width="49%"></img>
 <img src="images/blinds.png" width="49%">
-<img src="images/web.png" width="98%">
+<img src="images/web-new.png" width="98%">
 </p>
 Blinds-To-Go sells motorized roller blinds controllable via a wand with two buttons, which connects to the blinds over Micro-USB. Unfortunately, it does not offer any smart functionality, but having a Micro-USB connection makes it very hackable. Hooking up the wand to a breakout board shows that Up and Down buttons short D+ / D- pins to ground. This project replaces the wand with an ESP8266 microcontroller to allow raising blinds on schedule as well as remote control via the phone / browser. 
 
@@ -14,6 +14,7 @@ Once you flash your microcontroller with the provided code and plug it in, it wi
 * Attempt to connect to WiFi. If this is the first time you're starting it up, or if the existing WiFi configuration is no longer valid, it will host an unsecure SmarterBlinds WiFi hotspot. Connect to it via your phone, go through captive portal and connect it to your WiFi.
 * Once WiFi is connected, the controller will start an mDNS service so you can access it at http://smarterblinds.local If you don't have mDNS, you'll have to figure out the assigned IP from your router.
 * The web page has simple up and down controls to mimic the wand button behavior - you have to press and hold the buttons for about a second for the blinds to go up or down. The web page also allows you to set a time for each day to raise the blinds to the `Favorite 1` position (the position when you double-click the Up button).
+* You need to set your time offset and DST setting. Refresh the page to verify that controller time matches your clock.
 * ESP8266 does not have a real time clock, but since we have WiFi we can keep time using NTP. This allows the controller to match current time against the specified schedule.
 * ESP8266 needs constant USB power. The good news is that it will also keep your blinds fully charged.
 
